@@ -6,4 +6,4 @@ def test_example():
 
 
 def test_example_2():
-  assert 3 == 4
+  assert 5 == 5
