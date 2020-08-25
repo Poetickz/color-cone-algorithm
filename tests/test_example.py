@@ -7,6 +7,3 @@ def test_example():
 
 def test_example_2():
   assert 5 == 5
-
-def test_example_3():
-  assert 6 == 6
