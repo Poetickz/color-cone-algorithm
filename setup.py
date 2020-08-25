@@ -9,7 +9,7 @@ requirements = [
     # TODO: put package requirements here
     "colormath==3.0.0"
     "numpy==1.19.1"
-    "scikit-learn==0.23.2"
+    "scikit-learn==0.22.2"
     "opencv-python==4.4.0"
     "joblib==0.16.0"
 ]
