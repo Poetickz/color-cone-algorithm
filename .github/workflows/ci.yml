@@ -16,10 +16,27 @@ jobs:
         with:
           python-version: 3.7
       
-      - name: Installing pipenv
+      - name: Pip Cache
+        uses: actions/cache@v1
+        id: pip-cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-3.7-${{ hashFiles('Pipfile.lock') }}-v3
+          restore-keys: ${{ runner.os }}-pip-3.7-
+
+      - name: Pipenv cache
+        uses: actions/cache@v1
+        id: pipenv-cache
+        with:
+          path: ~/.cache/pipenv
+          key: ${{ runner.os }}-pipenv-3.7-${{ hashFiles('Pipfile.lock') }}-v3
+          restore-keys: ${{ runner.os }}-pipenv-3.7-
+
+      - name: Install pipenv
         uses: dschep/install-pipenv-action@v1
-      
-      - name: Installing dependencies
+
+      - name: Install dependencies
+        if: steps.pipenv-cache.outputs.cache-hit != 'true'
         run: |
           pipenv install --dev
 
