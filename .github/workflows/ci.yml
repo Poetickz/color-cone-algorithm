@@ -5,29 +5,25 @@ name: CI Color cone algorithm
 on: [push]
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set up Python 3.7 & env vars
+      - name: Setting up Python 3.7 & env vars
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
       
-      - name: Install pipenv
+      - name: Installing pipenv
         uses: dschep/install-pipenv-action@v1
       
-      - name: Install dependencies
+      - name: Installing dependencies
         run: |
           pipenv install --dev
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Test with pytest
+      - name: Testing with pytest
         run: |
           pipenv run pytest -x
 
