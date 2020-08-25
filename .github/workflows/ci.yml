@@ -31,7 +31,6 @@ jobs:
             ${{ runner.os }}-pip-
       
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           pipenv install --dev
 
