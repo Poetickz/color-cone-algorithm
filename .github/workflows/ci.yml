@@ -13,6 +13,8 @@ jobs:
 
       - name: Set up Python 3.7 & env vars
         uses: actions/setup-python@v1
+        env:
+          PIP_CACHE_DIR: .pipenv/pipcache
         with:
           python-version: 3.7
       
@@ -23,9 +25,8 @@ jobs:
         id: cache-dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
-          restore-keys: ${{ runner.os }}-pip-
+          path: ~/.pipenv
+          key: pipenv
       
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
