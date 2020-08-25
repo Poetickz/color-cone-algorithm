@@ -16,7 +16,7 @@ def modify_rgb(rgb_tuple, level=0.5, color_sensitivity=0.05):
     return new_rgb_int
 
 def get_intensity(x):
-    pipe = joblib.load('model-x7.pkl')
+    pipe = joblib.load('color-cone-algorithm/model-x7.pkl')
     n = len(pipe.coef_[0])
     exponents = np.array([*range(0, n, 1)])
     list_x = np.array([x]*n)
