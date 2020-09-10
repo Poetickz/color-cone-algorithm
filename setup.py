@@ -35,7 +35,7 @@ setup(
     author="Alan Rocha, Diego Aragón and Steve Albo",
     author_email='alan.rocha@udem.edu, diego.aragon@udem.edu and guillermo.albo@udem.edu ',
     url='https://github.com/Poetickz/color-cone-algorithm',
-    packages=find_packages(include=['color-cone-algorithm']),
+    packages=find_packages(include=['ColorCone']),
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
