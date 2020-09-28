@@ -29,4 +29,8 @@ jobs:
     # Building autodocumentation
       - name: Building documentation
         run: |
-          pipenv run make html -C docs
+					pipenv run make html -C docs
+				uses: actions/upload-artifact@v1
+					with:
+						name: DocumentationHTML
+						path: docs/_build/html/
