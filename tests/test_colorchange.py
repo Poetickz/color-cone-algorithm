@@ -6,6 +6,8 @@ rgb_float_example = (0.9372549019607843,
 
 
 def test_modify_color():
+    """This test that the color modifies corretly
+    """
     result = cc.modify_rgb(rgb_example, 1.2)
     assert isinstance(result, tuple)
     assert result == (246, 120, 107)
