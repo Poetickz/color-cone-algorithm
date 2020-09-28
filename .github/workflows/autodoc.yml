@@ -27,7 +27,6 @@ jobs:
         run: |
           pipenv install --dev
     # Building autodocumentation
-      - name: Building documentation
-			- uses: ammaraskar/sphinx-action@master
-				with:
-					docs-folder: "docs/"
+      - uses: ammaraskar/sphinx-action@master
+	with:
+	  docs-folder: "docs/"
