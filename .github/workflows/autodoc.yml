@@ -26,7 +26,7 @@ jobs:
       - name: Installing dependencies
         run: |
           pipenv install --dev
-    	# Building autodocumentation
+    # Building autodocumentation
       - name: Building auto documentation 
         uses: ammaraskar/sphinx-action@master
         with:
