@@ -28,9 +28,6 @@ jobs:
           pipenv install --dev
     # Building autodocumentation
       - name: Building documentation
-        run: |
-					pipenv run make html -C docs
-				uses: actions/upload-artifact@v1
-					with:
-						name: DocumentationHTML
-						path: docs/_build/html/
+			- uses: ammaraskar/sphinx-action@master
+				with:
+					docs-folder: "docs/"
