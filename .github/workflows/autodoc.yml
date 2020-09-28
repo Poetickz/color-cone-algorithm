@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Setting up Python 3.7 & env vars
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.7
 
@@ -25,7 +25,7 @@ jobs:
       
       - name: Installing dependencies
         run: |
-          pipenv install --dev
+          pip install sphinx_rtd_theme
     # Building autodocumentation
       - name: Building auto documentation 
         uses: ammaraskar/sphinx-action@master
