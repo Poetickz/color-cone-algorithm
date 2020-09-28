@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  tests:
+  auto-doc:
     # OS to run
     runs-on: ubuntu-latest
 
@@ -27,6 +27,7 @@ jobs:
         run: |
           pipenv install --dev
     # Building autodocumentation
-      - uses: ammaraskar/sphinx-action@master
-	with:
-	  docs-folder: "docs/"
+      - name: Building auto documentation 
+        uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"
