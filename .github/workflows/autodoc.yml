@@ -31,7 +31,7 @@ jobs:
           git clone https://github.com/Poetickz/color-cone-algorithm.git
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git checkout origin Documentation
+          git checkout origin/Documentation
           git pull origin Documentation
           git add --all
           git reset -- .gitignore
