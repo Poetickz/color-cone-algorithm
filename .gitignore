@@ -21,9 +21,6 @@ wheels/
 *.egg
 MANIFEST
 
-# Sphinx files
-docs/build
-
 # Unit test / coverage reports
 htmlcov/
 .tox/
