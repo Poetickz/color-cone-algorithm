@@ -40,5 +40,6 @@ jobs:
         with:
           branch: Documentation
           directory: docs
+          force: true 
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
