@@ -30,6 +30,8 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git remote remove origin
+          git remote add origin https://{Poetickz}:{4f6ad497a9e6e7d37543d4362914fd6c3c4c6478}@github.com/{Poetickz}/project.git
           git checkout origin/Documentation
           git pull origin Documentation
           git add --all
