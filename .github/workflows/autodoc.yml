@@ -15,7 +15,6 @@ jobs:
       # Validate every action
       - uses: actions/checkout@v1
         with:
-          repository: Poetickz/color-cone-algorithm
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Setting up Python 3.7 & env vars
