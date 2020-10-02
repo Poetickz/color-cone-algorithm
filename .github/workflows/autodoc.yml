@@ -14,8 +14,6 @@ jobs:
     steps:
       # Validate every action
       - uses: actions/checkout@v1
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Setting up Python 3.7 & env vars
         uses: actions/setup-python@v2
@@ -32,6 +30,7 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git remote set-url origin https://Poetickz:${{ secrets.ACCESS_TOKEN }}@github.com/Poetickz/color-cone-algorithm.git
           git checkout origin/Documentation
           git pull
           git add --all
