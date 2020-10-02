@@ -14,6 +14,9 @@ jobs:
     steps:
       # Validate every action
       - uses: actions/checkout@v1
+        with:
+          repository: Poetickz/color-cone-algorithm
+          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Setting up Python 3.7 & env vars
         uses: actions/setup-python@v2
@@ -31,7 +34,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git checkout origin/Documentation
-          git pull origin/Documentation
+          git pull
           git add --all
           git reset -- .gitignore
           git commit -m "Update documentation"
