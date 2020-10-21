@@ -5,6 +5,7 @@ import sys
 import os
 from sklearn.preprocessing import PolynomialFeatures
 import joblib
+import time
 
 def dictionary(fileName,num,model):
     m=cv2.imread(fileName)
@@ -28,6 +29,7 @@ def dictionary(fileName,num,model):
                 m[py][px][0]=b
                 m[py][px][1]=g
                 m[py][px][2]=r
+                print(str(cont*100/total)+"%")
                 cont+=1
                 
     cv2.waitKey(0)
@@ -47,6 +49,7 @@ def combinar(fileName,newName,num):
     return combinado
 
 if __name__ == "__main__":
+    start_time = time.time()
     fileName = str(sys.argv[1])
     fileName=fileName.split('\\')[-1]
     newDir=fileName.split(".")[0]
@@ -70,3 +73,4 @@ if __name__ == "__main__":
     combinado=combinar(fileName,newName,i)
     os.rename(newName,"pruebas/"+newDir+"/"+newName)
     os.rename(combinado,"pruebas/"+newDir+"/"+combinado)
+    print("--- %s seconds ---" % (time.time() - start_time))

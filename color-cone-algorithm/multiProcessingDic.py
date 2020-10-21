@@ -8,6 +8,7 @@ import joblib
 from multiprocessing import Pool
 import shutil
 from functools import partial
+import time
 colores={}
 
 
@@ -99,6 +100,7 @@ def partirImg(imagen):
     cv2.imwrite("temporal/temp-3.png",sub_image3)
 
 if __name__ == "__main__":
+    start_time = time.time()
     fileName = str(sys.argv[1])
     fileName=fileName.split('\\')[-1]
     newDir=fileName.split(".")[0]
@@ -124,3 +126,4 @@ if __name__ == "__main__":
     os.rename(newName,"pruebas/"+newDir+"/new-"+fileName)
     os.rename(combinado,"pruebas/"+newDir+"/"+combinado)
     eliminarTemp()
+    print("--- %s seconds ---" % (time.time() - start_time))
