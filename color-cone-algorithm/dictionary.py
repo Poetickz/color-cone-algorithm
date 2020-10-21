@@ -29,7 +29,7 @@ def dictionary(fileName,num,model):
                 m[py][px][1]=g
                 m[py][px][2]=r
                 cont+=1
-                print(str(cont*100/total)+"%")
+                
     cv2.waitKey(0)
     newName=fileName.split(".")
     newName="new-"+str(num)+"-"+newName[0]+"."+newName[1]
@@ -50,7 +50,19 @@ if __name__ == "__main__":
     fileName = str(sys.argv[1])
     fileName=fileName.split('\\')[-1]
     newDir=fileName.split(".")[0]
-    os.makedirs("pruebas/"+newDir)
+    try:
+        os.makedirs("pruebas/"+newDir)
+    except:
+        cont=0
+        done=False
+        while(not done):
+            try:
+                newDir=newDir+"("+str(cont)+")"
+                os.makedirs("pruebas/"+newDir)
+                done=True
+            except :
+                cont+=1
+            
     newNames=[]
     model = joblib.load('model-x7.pkl')
     i=0.3
