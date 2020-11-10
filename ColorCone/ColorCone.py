@@ -47,11 +47,11 @@ class ColorCone(object):
         
         return intensity
 
-    def _saturate_it(self, hue, intensity):
+    def _saturate_it(self, saturation, intensity):
         if (intensity < self.color_sensitivity):
-            return (hue*self.level)*(1 + intensity)
+            return (saturation*self.level)*(1 + intensity)
         else:
-            return (hue*0.9)*(1 + intensity)
+            return (saturation*0.9)*(1 + intensity)
 
     def _not_convinient_color(self, hsl):
         if ((hsl[0]<240 and hsl[0]>205) or (hsl[2]>0.7 or hsl[2]<0.1)):
