@@ -1,1 +1,1 @@
-python pixelXpixel.py %*
+pypenv run python multiProcessingDic.py %*

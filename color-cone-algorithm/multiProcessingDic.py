@@ -1,129 +1,122 @@
-import numpy as np
-import cv2
-import colorchange as color
-import sys
-import os
-from sklearn.preprocessing import PolynomialFeatures
-import joblib
+from joblib import load
+from cv2 import imread
+from cv2 import imwrite
+from numpy import shape
+from numpy import hstack
+from numpy import vstack
+
+
+from colorchange import modify_rgb
+
 from multiprocessing import Pool
-import shutil
-from functools import partial
-import time
-colores={}
+from sys import argv
+from os import makedirs
+from os import rename
+from time import time
+from shutil import rmtree
 
 
-
-    
-def eliminarTemp():
+colors={}
+ 
+def removeTemp():
     """
         eliminaTemporales
     """
-    shutil.rmtree('temporal/')
+    rmtree('temporal/')
 
 def dictionary(fileName):
     """
         procesamiento de imagen
     """
-    model = joblib.load('model-x7.pkl')
-    i=0.3
-    m=cv2.imread(fileName)
-    h,w,bpp = np.shape(m)
-    for py in range(0,h):
-        for px in range(0,w):
-                b=m[py][px][0]
-                g=m[py][px][1]
-                r=m[py][px][2] 
-                rgb = (r,g,b)
-                strDic=str(r)+","+str(g)+","+str(b)
-                if strDic in colores.keys():
-                    r,g,b=colores[strDic]
+    model = load('model-x7.pkl')
+    subimage=fileName
+    h,w,bpp = shape(subimage)
+    for pixelY in range(h):
+        for pixelX in range(w):
+                blue=subimage[pixelY][pixelX][0]
+                green=subimage[pixelY][pixelX][1]
+                red=subimage[pixelY][pixelX][2] 
+                rgbTuple = (red,green,blue)
+                if rgbTuple in colors.keys():
+                    red,green,blue=colors[rgbTuple]
                 else:
-                    r,g,b=color.modify_rgb(rgb,model,1+i,0.5)
-                    colores[strDic]=(r,g,b)
-                m[py][px][0]=b
-                m[py][px][1]=g
-                m[py][px][2]=r
-    cv2.waitKey(0)
-    newName=fileName.split(".")
-    newName=newName[0].split("/")
-    newName="temporal/new-"+newName[1]+".png"
-    cv2.imwrite(newName,m)
-    return newName
+                    red,green,blue=modify_rgb(rgbTuple,model,1.025,1)
+                    colors[rgbTuple]=(red,green,blue)
+                subimage[pixelY][pixelX][0]=blue
+                subimage[pixelY][pixelX][1]=green
+                subimage[pixelY][pixelX][2]=red
+    return subimage
 
-def combinar(fileName,newName):
+def combine(fileName,newName):
     """
         combinar imagen inicial y final
     """
-    m=cv2.imread(fileName)
-    m1=cv2.imread(newName)
-    numpy_horizontal = np.hstack((m, m1))
-    combinado=fileName.split(".")
-    combinado="c-"+combinado[0]+"."+combinado[1]
-    cv2.imwrite(combinado,numpy_horizontal)
-    return combinado
+    originalImg=imread(fileName)
+    newImage=imread(newName)
+    horizontal = hstack((originalImg, newImage))
+    combined=fileName.split(".")
+    combined="c-"+combined[0]+"."+combined[1]
+    imwrite(combined,horizontal)
+    return combined
 
-def reconstruirImg(arrDeImagen,newName):
+def pasteImg(arrDeImagen,newName):
     """
+        combina las 4 partes de la imagen
+    """    
+    topSubimages = hstack((arrDeImagen[0], arrDeImagen[1]))
+    bottomSubimages = hstack((arrDeImagen[2], arrDeImagen[3]))
+    completeImage=vstack((topSubimages,bottomSubimages))
+    imwrite(newName,completeImage)
 
-    """
-    m=cv2.imread(arrDeImagen[0])
-    m1=cv2.imread(arrDeImagen[1])
-    m2=cv2.imread(arrDeImagen[2])
-    m3=cv2.imread(arrDeImagen[3])
-    numpy_horizontal = np.hstack((m, m1))
-    numpy_horizontal1 = np.hstack((m2, m3))
-    numpy_vertical=np.vstack((numpy_horizontal,numpy_horizontal1))
-    cv2.imwrite(newName,numpy_vertical)
-
-def multiproceso():
+def multiprocess(subimgArr):
     """
         funcion que se encarga del multiprocesamiento
     """
-    arrDeImagen=['temporal/temp-0.png','temporal/temp-1.png','temporal/temp-2.png','temporal/temp-3.png']
     with Pool(4) as p:
-        arrDeImagen=p.map(dictionary, arrDeImagen)
-    return arrDeImagen
+        subimgArr=p.map(dictionary,subimgArr)
+    return subimgArr
 
-def partirImg(imagen):
+def cutImg(imagen):
     """
-        Partir imagen
+        Parte la imagen en 4 subimagenes
     """
-    full_image=cv2.imread(imagen)
-    h,w,bpp = np.shape(full_image)
-    sub_image0 = full_image[0: h//2, 0:w//2]
-    sub_image1 = full_image[0: h//2, w//2:w]
-    sub_image2 = full_image[h//2: h, 0:w//2]
-    sub_image3 = full_image[h//2: h, w//2:w]
-    cv2.imwrite("temporal/temp-0.png",sub_image0)
-    cv2.imwrite("temporal/temp-1.png",sub_image1)
-    cv2.imwrite("temporal/temp-2.png",sub_image2)
-    cv2.imwrite("temporal/temp-3.png",sub_image3)
+    originalImage=imread(imagen)
+    h,w,bpp = shape(originalImage)
+    subimageTopLeft = originalImage[: h//2, :w//2]
+    subimageTopRigth = originalImage[: h//2, w//2:w]
+    subimageBottomLeft = originalImage[h//2: h, :w//2]
+    subimageBottomRigth = originalImage[h//2: h, w//2:w]
+    
+    return [subimageTopLeft,subimageTopRigth,subimageBottomLeft,subimageBottomRigth]
+   
 
 if __name__ == "__main__":
-    start_time = time.time()
-    fileName = str(sys.argv[1])
+    start_time = time()
+    fileName = str(argv[1])
     fileName=fileName.split('\\')[-1]
     newDir=fileName.split(".")[0]
     try:
-        os.makedirs("temporal/")
-        os.makedirs("pruebas/"+newDir)
+        makedirs("temporal/")
+        makedirs("pruebas/"+newDir)
     except:
         cont=0
         done=False
         while(not done):
             try:
                 newDir=newDir+"("+str(cont)+")"
-                os.makedirs("pruebas/"+newDir)
+                makedirs("pruebas/"+newDir)
                 done=True
             except :
                 cont+=1  
-    partirImg(fileName)
-    arrDirc=multiproceso()
+    arrImg=cutImg(fileName)
+    arrImg=multiprocess(arrImg)
     newName="temporal/new-"+fileName
-    reconstruirImg(arrDirc,newName)
-    newName="temporal/new-"+fileName
-    combinado=combinar(fileName,newName)
-    os.rename(newName,"pruebas/"+newDir+"/new-"+fileName)
-    os.rename(combinado,"pruebas/"+newDir+"/"+combinado)
-    eliminarTemp()
-    print("--- %s seconds ---" % (time.time() - start_time))
+    pasteImg(arrImg,newName)
+    #combined=combine(fileName,newName)
+    rename(newName,"pruebas/"+newDir+"/new-"+fileName)
+    #rename(combined,"pruebas/"+newDir+"/"+combined)
+    #f=open("time.txt","a")
+    #f.write(str((time() - start_time)*1000.0)+"\n")
+    #f.close()
+    print("-- %s seconds --" %(time() - start_time))
+    removeTemp()

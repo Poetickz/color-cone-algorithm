@@ -8,6 +8,8 @@ def modify_rgb(rgb_tuple,model,level=0.5, color_sensitivity=0.05):
     rgb = rgb_int_to_float(rgb_tuple)
     rgb_class = sRGBColor(rgb[0], rgb[1], rgb[2])
     hsl = convert_color(rgb_class, HSLColor).get_value_tuple()
+    if((hsl[0]<240 and hsl[0]>205) or (hsl[2]>0.7 or hsl[2]<0.1)):
+        return rgb_tuple
     intensity = get_intensity(int(hsl[0]),model)
     new_hsl = convert(hsl, intensity, level, color_sensitivity)
     new_hsl = HSLColor(new_hsl[0],new_hsl[1],new_hsl[2])
