@@ -37,9 +37,9 @@ class ColorCone(object):
         if(hue > 280):
             hue = hue - 280
 
-        n = len(self.model.coef_[0])
-        exponents = np.array([*range(0, n, 1)])
-        list_x = np.array([hue]*n)
+        # n = len(self.model.coef_[0])
+        exponents = np.array([*range(0, 8, 1)]) # Change 8 to n to different model
+        list_x = np.array([hue]*8) # Change 8 to n to different model
         intensity = self.model.predict([np.array(np.power(list_x,exponents))])[0][0]
 
         if intensity < 0:
